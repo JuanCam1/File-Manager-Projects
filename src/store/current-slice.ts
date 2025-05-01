@@ -11,15 +11,18 @@ export interface ProjectSlice {
   setProjects: (projects: Project[]) => void;
   setLoading: (loading: boolean) => void;
   setRefreshing: (refreshing: boolean) => void;
-
+  initPlatformPath: () => Promise<void>;
   loadProjects: () => Promise<void>;
   handleSelectDirectory: () => Promise<void>;
   handleRefresh: () => Promise<void>;
   handleOpenWithVSCode: (projectPath: string) => Promise<boolean>;
 }
 
-export const createProjectSlice: StateCreator<ProjectSlice, [["zustand/devtools", never]]> = (set, get) => ({
-  currentPath: "C:\\Users\\jkl3_\\Desktop\\Developer",
+export const createProjectSlice: StateCreator<
+  ProjectSlice,
+  [["zustand/devtools", never]]
+> = (set, get) => ({
+  currentPath: null,
   projects: [],
   loading: false,
   refreshing: false,
@@ -28,7 +31,15 @@ export const createProjectSlice: StateCreator<ProjectSlice, [["zustand/devtools"
   setProjects: (projects: Project[]) => set({ projects }),
   setLoading: (loading: boolean) => set({ loading }),
   setRefreshing: (refreshing: boolean) => set({ refreshing }),
-
+  initPlatformPath: async () => {
+    try {
+      const platformPath = await window.api.platform();
+      console.log(platformPath);
+      set({ currentPath: platformPath });
+    } catch (error) {
+      console.error("Error al obtener la plataforma:", error);
+    }
+  },
   loadProjects: async () => {
     const { currentPath } = get();
 
@@ -42,13 +53,13 @@ export const createProjectSlice: StateCreator<ProjectSlice, [["zustand/devtools"
       const projectsList = await window.api.getProjects(currentPath);
       set({
         projects: projectsList,
-        loading: false
+        loading: false,
       });
     } catch (error) {
-      console.error('Error al cargar proyectos:', error);
+      console.error("Error al cargar proyectos:", error);
       set({
         projects: [],
-        loading: false
+        loading: false,
       });
     }
   },
@@ -61,7 +72,7 @@ export const createProjectSlice: StateCreator<ProjectSlice, [["zustand/devtools"
         await get().loadProjects();
       }
     } catch (error) {
-      console.error('Error al seleccionar directorio:', error);
+      console.error("Error al seleccionar directorio:", error);
     }
   },
 
@@ -72,7 +83,7 @@ export const createProjectSlice: StateCreator<ProjectSlice, [["zustand/devtools"
       try {
         await get().loadProjects();
       } catch (error) {
-        console.error('Error al actualizar proyectos:', error);
+        console.error("Error al actualizar proyectos:", error);
       } finally {
         setTimeout(() => {
           set({ refreshing: false });
@@ -85,14 +96,15 @@ export const createProjectSlice: StateCreator<ProjectSlice, [["zustand/devtools"
     try {
       const success = await window.api.openWithVSCode(projectPath);
       if (!success) {
-        alert('Error al abrir VSCode. Asegúrate de que está instalado y accesible desde la terminal.');
+        alert(
+          "Error al abrir VSCode. Asegúrate de que está instalado y accesible desde la terminal.",
+        );
         return false;
       }
       return true;
     } catch (error) {
-      console.error('Error al abrir con VSCode:', error);
+      console.error("Error al abrir con VSCode:", error);
       return false;
     }
-  }
+  },
 });
-

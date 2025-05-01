@@ -1,4 +1,4 @@
-import { Skeleton } from "./ui/skeleton"
+import { Skeleton } from "./ui/skeleton";
 
 const SkeletonList = () => {
   return (
@@ -7,7 +7,6 @@ const SkeletonList = () => {
         <Skeleton className="w-64 h-10" />
         <Skeleton className="w-40 h-10" />
       </div>
-
 
       <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-8">
         <Skeleton className="w-full h-32" />
@@ -18,6 +17,6 @@ const SkeletonList = () => {
         <Skeleton className="w-full" />
       </div>
     </div>
-  )
-}
-export default SkeletonList
+  );
+};
+export default SkeletonList;

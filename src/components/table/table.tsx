@@ -41,7 +41,9 @@ const Table = ({ children, className }: TableProps) => {
 const TableHeader = ({ children }: TableProps) => {
   return (
     <thead className="max-md:hidden">
-      <tr className="max-md:block max-md:mb-2 max-md:border-b-4 border-none">{children}</tr>
+      <tr className="max-md:block max-md:mb-2 max-md:border-b-4 border-none">
+        {children}
+      </tr>
     </thead>
   );
 };

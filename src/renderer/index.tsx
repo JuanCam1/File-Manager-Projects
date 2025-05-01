@@ -11,5 +11,5 @@ const root = createRoot(idRoot);
 root.render(
   <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
     <App />
-  </ThemeProvider>
+  </ThemeProvider>,
 );

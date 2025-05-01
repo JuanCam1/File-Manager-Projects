@@ -7,6 +7,7 @@ declare global {
       selectDirectory: () => Promise<string | null>;
       getProjects: (dirPath: string) => Promise<Project[]>;
       openWithVSCode: (projectPath: string) => Promise<boolean>;
+      platform:() => Promise<string>;
     };
   }
 }

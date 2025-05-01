@@ -1,4 +1,4 @@
-import { Code, Laptop, MonitorPlay, Server, Smartphone } from 'lucide-react';
+import { Code, Laptop, MonitorPlay, Server, Smartphone } from "lucide-react";
 
 export const getIcon = (type: string) => {
   const icons: Record<string, React.ElementType> = {

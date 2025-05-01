@@ -8,4 +8,4 @@ export const getDeviceType = (name: string) => {
   }
 
   return "code";
-}
+};

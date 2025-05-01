@@ -23,6 +23,6 @@ const ProjectTable: FC<ProjectListProps> = ({ projects }) => {
         </Table.TBody>
       </Table>
     </div>
-  )
-}
-export default ProjectTable
+  );
+};
+export default ProjectTable;

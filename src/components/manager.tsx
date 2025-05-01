@@ -1,10 +1,16 @@
-import { Code, FolderOpen, Laptop, Server, Smartphone } from "lucide-react"
-import { useState } from "react"
-import { Button } from "./ui/button"
-import { Input } from "./ui/input"
-import { Badge } from "./ui/badge"
-import { Tabs, TabsList, TabsContent, TabsTrigger } from "./ui/tabs"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card"
+import { Code, FolderOpen, Laptop, Server, Smartphone } from "lucide-react";
+import { useState } from "react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Badge } from "./ui/badge";
+import { Tabs, TabsList, TabsContent, TabsTrigger } from "./ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 
 const projectsData = [
   {
@@ -55,39 +61,41 @@ const projectsData = [
     lastOpened: "2023-10-01",
     tech: ["Flutter", "Firebase"],
   },
-]
+];
 
 function Manager() {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedType, setSelectedType] = useState("all")
-  const [viewMode, setViewMode] = useState("grid")
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedType, setSelectedType] = useState("all");
+  const [viewMode, setViewMode] = useState("grid");
 
   // Filter projects based on search term and selected type
   const filteredProjects = projectsData.filter((project) => {
-    const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesType = selectedType === "all" || project.type === selectedType
-    return matchesSearch && matchesType
-  })
+    const matchesSearch = project.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesType = selectedType === "all" || project.type === selectedType;
+    return matchesSearch && matchesType;
+  });
 
   // Function to open project in VSCode (this would need to be implemented with a backend service)
   const openInVSCode = (projectPath: string) => {
-    console.log(`Opening project at ${projectPath} in VSCode`)
+    console.log(`Opening project at ${projectPath} in VSCode`);
     // In a real app, you would make an API call to a local service or use Electron to open VSCode
-    alert(`Opening project at ${projectPath} in VSCode`)
-  }
+    alert(`Opening project at ${projectPath} in VSCode`);
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
       case "frontend":
-        return <Laptop className="w-4 h-4" />
+        return <Laptop className="w-4 h-4" />;
       case "backend":
-        return <Server className="w-4 h-4" />
+        return <Server className="w-4 h-4" />;
       case "mobile":
-        return <Smartphone className="w-4 h-4" />
+        return <Smartphone className="w-4 h-4" />;
       default:
-        return <Code className="w-4 h-4" />
+        return <Code className="w-4 h-4" />;
     }
-  }
+  };
 
   return (
     <div className="flex bg-background h-screen">
@@ -177,7 +185,11 @@ function Manager() {
               className="w-64"
             />
 
-            <Tabs value={viewMode} onValueChange={setViewMode} className="w-[200px]">
+            <Tabs
+              value={viewMode}
+              onValueChange={setViewMode}
+              className="w-[200px]"
+            >
               <TabsList className="grid grid-cols-2 w-full">
                 <TabsTrigger value="grid">Grid</TabsTrigger>
                 <TabsTrigger value="list">List</TabsTrigger>
@@ -200,26 +212,42 @@ function Manager() {
                   <Card key={project.id} className="overflow-hidden">
                     <CardHeader className="pb-2">
                       <div className="flex justify-between items-start">
-                        <CardTitle className="text-lg">{project.name}</CardTitle>
-                        <Badge variant="outline" className="flex items-center gap-1">
+                        <CardTitle className="text-lg">
+                          {project.name}
+                        </CardTitle>
+                        <Badge
+                          variant="outline"
+                          className="flex items-center gap-1"
+                        >
                           {getTypeIcon(project.type)}
                           <span>{project.type}</span>
                         </Badge>
                       </div>
                     </CardHeader>
                     <CardContent className="pb-2">
-                      <p className="text-muted-foreground text-sm truncate">{project.path}</p>
+                      <p className="text-muted-foreground text-sm truncate">
+                        {project.path}
+                      </p>
                       <div className="flex flex-wrap gap-1 mt-2">
                         {project.tech.map((tech) => (
-                          <Badge key={tech} variant="secondary" className="text-xs">
+                          <Badge
+                            key={tech}
+                            variant="secondary"
+                            className="text-xs"
+                          >
                             {tech}
                           </Badge>
                         ))}
                       </div>
                     </CardContent>
                     <CardFooter className="flex justify-between pt-2">
-                      <p className="text-muted-foreground text-xs">Last opened: {project.lastOpened}</p>
-                      <Button size="sm" onClick={() => openInVSCode(project.path)}>
+                      <p className="text-muted-foreground text-xs">
+                        Last opened: {project.lastOpened}
+                      </p>
+                      <Button
+                        size="sm"
+                        onClick={() => openInVSCode(project.path)}
+                      >
                         Open in VSCode
                       </Button>
                     </CardFooter>
@@ -235,18 +263,28 @@ function Manager() {
                     <tr className="bg-muted/50">
                       <th className="p-3 font-medium text-left">Name</th>
                       <th className="p-3 font-medium text-left">Type</th>
-                      <th className="hidden md:table-cell p-3 font-medium text-left">Path</th>
-                      <th className="hidden lg:table-cell p-3 font-medium text-left">Technologies</th>
+                      <th className="hidden md:table-cell p-3 font-medium text-left">
+                        Path
+                      </th>
+                      <th className="hidden lg:table-cell p-3 font-medium text-left">
+                        Technologies
+                      </th>
                       <th className="p-3 font-medium text-left">Last Opened</th>
                       <th className="p-3 font-medium text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredProjects.map((project) => (
-                      <tr key={project.id} className="hover:bg-muted/50 border-t">
+                      <tr
+                        key={project.id}
+                        className="hover:bg-muted/50 border-t"
+                      >
                         <td className="p-3 font-medium">{project.name}</td>
                         <td className="p-3">
-                          <Badge variant="outline" className="flex items-center gap-1">
+                          <Badge
+                            variant="outline"
+                            className="flex items-center gap-1"
+                          >
                             {getTypeIcon(project.type)}
                             <span>{project.type}</span>
                           </Badge>
@@ -257,15 +295,24 @@ function Manager() {
                         <td className="hidden lg:table-cell p-3">
                           <div className="flex flex-wrap gap-1">
                             {project.tech.map((tech) => (
-                              <Badge key={tech} variant="secondary" className="text-xs">
+                              <Badge
+                                key={tech}
+                                variant="secondary"
+                                className="text-xs"
+                              >
                                 {tech}
                               </Badge>
                             ))}
                           </div>
                         </td>
-                        <td className="p-3 text-muted-foreground text-sm">{project.lastOpened}</td>
+                        <td className="p-3 text-muted-foreground text-sm">
+                          {project.lastOpened}
+                        </td>
                         <td className="p-3 text-right">
-                          <Button size="sm" onClick={() => openInVSCode(project.path)}>
+                          <Button
+                            size="sm"
+                            onClick={() => openInVSCode(project.path)}
+                          >
                             Open in VSCode
                           </Button>
                         </td>
@@ -281,6 +328,5 @@ function Manager() {
     </div>
   );
 }
-
 
 export default Manager;

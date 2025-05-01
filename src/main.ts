@@ -1,19 +1,20 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu } from "electron";
-import path from "node:path";
 import { shell } from "electron";
 import started from "electron-squirrel-startup";
-import { template } from "./api/libs";
+import path from "node:path";
 import { exec } from "node:child_process";
 import fs from "node:fs";
+import { platform } from "node:process";
 
 if (started) {
   app.quit();
 }
 
-let mainWindow: BrowserWindow
+let mainWindow: BrowserWindow;
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
+    icon: "../images/logo.png",
     title: "File Manager Projects",
     minHeight: 600,
     minWidth: 500,
@@ -27,7 +28,7 @@ const createWindow = () => {
   mainWindow.maximize();
 
   // const menu = Menu.buildFromTemplate(template);
-  // Menu.setApplicationMenu(menu);
+  Menu.setApplicationMenu(null);
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url);
@@ -38,13 +39,13 @@ const createWindow = () => {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
     mainWindow.loadFile(
-      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
+      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
     );
   }
 
-  mainWindow.webContents.openDevTools({
-    mode: "detach",
-  });
+  // mainWindow.webContents.openDevTools({
+  //   mode: "detach",
+  // });
 };
 
 app.on("ready", createWindow);
@@ -78,9 +79,9 @@ ipcMain.on("maximize", () => {
   }
 });
 
-ipcMain.handle('select-directory', async () => {
+ipcMain.handle("select-directory", async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
-    properties: ['openDirectory']
+    properties: ["openDirectory"],
   });
 
   if (!result.canceled) {
@@ -91,13 +92,13 @@ ipcMain.handle('select-directory', async () => {
 
 function isProject(dirPath: string) {
   return (
-    fs.existsSync(path.join(dirPath, 'package.json')) ||
-    fs.existsSync(path.join(dirPath, '.git')) ||
-    fs.existsSync(path.join(dirPath, '.vscode'))
+    fs.existsSync(path.join(dirPath, "package.json")) ||
+    fs.existsSync(path.join(dirPath, ".git")) ||
+    fs.existsSync(path.join(dirPath, ".vscode"))
   );
 }
 
-ipcMain.handle('get-projects', async (_: unknown, dirPath: string) => {
+ipcMain.handle("get-projects", async (_: unknown, dirPath: string) => {
   try {
     const entries = fs.readdirSync(dirPath, { withFileTypes: true });
     const projects = [];
@@ -108,7 +109,7 @@ ipcMain.handle('get-projects', async (_: unknown, dirPath: string) => {
         if (isProject(projectPath)) {
           projects.push({
             name: entry.name,
-            path: projectPath
+            path: projectPath,
           });
         }
       }
@@ -116,15 +117,13 @@ ipcMain.handle('get-projects', async (_: unknown, dirPath: string) => {
 
     return projects;
   } catch (error) {
-    console.error('Error al leer los proyectos:', error);
+    console.error("Error al leer los proyectos:", error);
     return [];
   }
 });
 
-// Manejador para abrir un proyecto con VSCode
-ipcMain.handle('open-with-vscode', async (_: unknown, projectPath: string) => {
+ipcMain.handle("open-with-vscode", async (_: unknown, projectPath: string) => {
   try {
-    // Comando para abrir VS Code con el proyecto
     exec(`code "${projectPath}"`, (error) => {
       if (error) {
         console.error(`Error al abrir VSCode: ${error}`);
@@ -133,7 +132,19 @@ ipcMain.handle('open-with-vscode', async (_: unknown, projectPath: string) => {
     });
     return true;
   } catch (error) {
-    console.error('Error al abrir con VSCode:', error);
+    console.error("Error al abrir con VSCode:", error);
     return false;
+  }
+});
+
+ipcMain.handle("platform", async () => {
+  const pathWind = "C:\\Users\\juanc\\Desktop\\Developer";
+  const pathLinux = "/home/juanc/Escritorio/Dev/developer";
+  try {
+    const type = platform === "win32" ? pathWind : pathLinux;
+    return type;
+  } catch (error) {
+    console.log("Error", error);
+    return pathLinux;
   }
 });
