@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 
 import Header from "@/sections/header";
 import ProjectList from "@/sections/project-list";
+import { ModeToggle } from "@/components/toggle-mode";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -36,7 +37,10 @@ function Index() {
   }, [currentPath]);
 
   return (
-    <div className="flex flex-col bg-white dark:bg-zinc-900 px-5 rounded-md w-full lg:w-[80%] min-h-[95%]">
+    <div className="flex flex-col bg-white dark:bg-zinc-900 px-5 rounded-md w-full lg:w-[80%] min-h-[95%] pt-6">
+      <div className="flex w-full justify-end">
+        <ModeToggle />
+      </div>
       <Header
         onSelectDirectory={handleSelectDirectory}
         onRefresh={handleRefresh}

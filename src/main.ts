@@ -5,6 +5,7 @@ import path from "node:path";
 import { exec } from "node:child_process";
 import fs from "node:fs";
 import { platform } from "node:process";
+import { template } from "./api/libs";
 
 if (started) {
   app.quit();
