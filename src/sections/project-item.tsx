@@ -21,6 +21,9 @@ const ProjectItem: FC<ProjectItemProps> = ({ project }) => {
   const handleOpenWithVSCode = useProjectStore(
     (state) => state.handleOpenWithVSCode,
   );
+  const handleOpenTerminal = useProjectStore(
+    (state) => state.handleOpenTerminal,
+  );
   const type = getDeviceType(project.name);
   const Icon = getIcon(type);
   const title = getTitle(type);
@@ -42,13 +45,21 @@ const ProjectItem: FC<ProjectItemProps> = ({ project }) => {
       <CardContent className="pb-2">
         <p className="text-muted-foreground text-sm truncate">{project.path}</p>
       </CardContent>
-      <CardFooter className="flex justify-between pt-2">
+      <CardFooter className="flex gap-3 pt-2">
         <Button
           className="text-white"
           size="sm"
           onClick={() => handleOpenWithVSCode(project.path)}
         >
           vsc
+        </Button>
+        <Button
+          variant="outline"
+          className="text-white "
+          size="sm"
+          onClick={() => handleOpenTerminal(project.path)}
+        >
+          Terminal
         </Button>
       </CardFooter>
     </Card>

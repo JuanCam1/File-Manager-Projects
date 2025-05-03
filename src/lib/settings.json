@@ -1,0 +1,35 @@
+{
+    "editor.fontSize": 13,
+    "editor.fontFamily": "'JetBrains Mono', monospace",
+    "editor.fontLigatures": "'calt', 'liga', 'clig', 'kern'",
+    "editor.scrollbar.vertical": "hidden",
+    "editor.overviewRulerBorder": false,
+    "editor.hideCursorInOverviewRuler": true,
+    "editor.formatOnSave": true,
+    "editor.minimap.enabled": false,
+    "editor.guides.indentation": false,
+    "editor.glyphMargin": false,
+    "editor.matchBrackets": false,
+    "workbench.colorTheme": "One Dark Pro Night Flat",
+    "workbench.sideBar.location": "right",
+    "workbench.secondarySideBar.showLabels": true,
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.statusBar.visible": true,
+    "indenticator.width": 1,
+    "indenticator.color.dark": "rgba(255,255,255,0.1)",
+    "breadcrumbs.enabled": false,
+    "dart.flutterSdkPath": "/home/juanc/development/flutter",
+    "dart.previewFlutterUiGuides": true,
+    "dart.previewFlutterUiGuidesCustomTracking": true,
+    "terminal.integrated.fontLigatures.enabled": true,
+    "editor.formatOnSaveMode": "file",
+    "editor.defaultFormatter": "biomejs.biome",
+    "[javascript]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit"
+  },
+  "workbench.startupEditor": "none",
+  "explorer.confirmDelete": false
+}

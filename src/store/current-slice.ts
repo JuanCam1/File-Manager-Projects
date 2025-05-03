@@ -16,6 +16,7 @@ export interface ProjectSlice {
   handleSelectDirectory: () => Promise<void>;
   handleRefresh: () => Promise<void>;
   handleOpenWithVSCode: (projectPath: string) => Promise<boolean>;
+  handleOpenTerminal: (projectPath: string) => Promise<boolean>;
 }
 
 export const createProjectSlice: StateCreator<
@@ -104,6 +105,20 @@ export const createProjectSlice: StateCreator<
       return true;
     } catch (error) {
       console.error("Error al abrir con VSCode:", error);
+      return false;
+    }
+  },
+
+  handleOpenTerminal: async (projectPath: string) => {
+    try {
+      const success = await window.api.openTerminal(projectPath);
+      if (!success) {
+        alert("Error al abrir la terminal.");
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error("Error al abrir la terminal:", error);
       return false;
     }
   },

@@ -8,5 +8,6 @@ contextBridge.exposeInMainWorld("api", {
   getProjects: (dirPath: string) => ipcRenderer.invoke("get-projects", dirPath),
   openWithVSCode: (path: string) =>
     ipcRenderer.invoke("open-with-vscode", path),
+  openTerminal: (path: string) => ipcRenderer.invoke("open-terminal", path),
   platform: () => ipcRenderer.invoke("platform"),
 });

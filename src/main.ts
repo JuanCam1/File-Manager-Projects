@@ -2,10 +2,11 @@ import { app, BrowserWindow, dialog, ipcMain, Menu } from "electron";
 import { shell } from "electron";
 import started from "electron-squirrel-startup";
 import path from "node:path";
-import { exec } from "node:child_process";
+import { exec, spawn } from "node:child_process";
 import fs from "node:fs";
 import { platform } from "node:process";
 import { template } from "./api/libs";
+import { promisify } from "node:util";
 
 if (started) {
   app.quit();
@@ -52,7 +53,7 @@ const createWindow = () => {
 app.on("ready", createWindow);
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
+  if (platform !== "darwin") {
     app.quit();
   }
 });
@@ -147,5 +148,153 @@ ipcMain.handle("platform", async () => {
   } catch (error) {
     console.log("Error", error);
     return pathLinux;
+  }
+});
+
+// ipcMain.handle("open-terminal", async (_: unknown, path: string) => {
+//   let command = null;
+//   try {
+//     switch (platform) {
+//       case "win32": {
+//         command = `start cmd.exe /K "cd /d ${path}"`;
+//         break;
+//       }
+//       case "darwin": {
+//         command = `open -a Terminal ${path}`;
+//         break;
+//       }
+//       case "linux": {
+//         const desktopEnv = process.env.XDG_CURRENT_DESKTOP?.toLowerCase() || "";
+
+//         if (desktopEnv.includes("gnome")) {
+//           command = `gnome-terminal --working-directory="${path}"`;
+//         } else if (desktopEnv.includes("kde")) {
+//           command = `konsole --workdir "${path}"`;
+//         } else if (desktopEnv.includes("xfce")) {
+//           command = `xfce4-terminal --working-directory="${path}"`;
+//         } else {
+//           command = `x-terminal-emulator -e "cd ${path} && bash"`;
+//         }
+//         break;
+//       }
+//     }
+
+//     if (!command) {
+//       return false;
+//     }
+
+//     exec(command, (error) => {
+//       if (error) {
+//         console.error(`Error al abrir terminal: ${error}`);
+//         return false;
+//       }
+//     });
+//     return true;
+//   } catch (error) {
+//     console.error("Error al intentar abrir la terminal:", error);
+//     return false;
+//   }
+// });
+
+const execAsync = promisify(exec);
+async function commandExists(command: string): Promise<boolean> {
+  try {
+    await execAsync(`which ${command}`);
+    return true;
+  } catch (_error) {
+    return false;
+  }
+}
+
+ipcMain.handle("open-terminal", async (_: unknown, path: string) => {
+  try {
+    switch (platform) {
+      case "win32": {
+        const cmdProcess = spawn("cmd.exe", ["/K", `cd /d "${path}"`], {
+          detached: true,
+          stdio: "ignore",
+          windowsHide: false,
+          shell: true,
+        });
+
+        cmdProcess.unref();
+        return true;
+      }
+      case "darwin": {
+        exec(`open -a Terminal "${path}"`, (error) => {
+          if (error) {
+            console.error("Error al abrir Terminal en macOS:", error);
+          }
+        });
+        return true;
+      }
+
+      case "linux": {
+        const terminals = [
+          { cmd: "gnome-terminal", args: [`--working-directory=${path}`] },
+          { cmd: "konsole", args: [`--workdir`, path] },
+          { cmd: "xfce4-terminal", args: [`--working-directory=${path}`] },
+          { cmd: "mate-terminal", args: [`--working-directory=${path}`] },
+          { cmd: "terminator", args: [`--working-directory=${path}`] },
+          { cmd: "tilix", args: [`--working-directory=${path}`] },
+          { cmd: "xterm", args: [`-e`, `cd "${path}" && bash`] },
+          { cmd: "urxvt", args: [`-e`, `bash -c "cd '${path}' && exec bash"`] },
+          { cmd: "kitty", args: [`--directory=${path}`] },
+          { cmd: "alacritty", args: [`--working-directory`, path] },
+        ];
+
+        const desktopEnv = process.env.XDG_CURRENT_DESKTOP?.toLowerCase() || "";
+
+        if (desktopEnv.includes("gnome")) {
+          const gnomeIndex = terminals.findIndex(
+            (t) => t.cmd === "gnome-terminal",
+          );
+          if (gnomeIndex > 0) {
+            const [gnomeTerminal] = terminals.splice(gnomeIndex, 1);
+            terminals.unshift(gnomeTerminal);
+          }
+        } else if (desktopEnv.includes("kde")) {
+          const kdeIndex = terminals.findIndex((t) => t.cmd === "konsole");
+          if (kdeIndex > 0) {
+            const [kdeTerminal] = terminals.splice(kdeIndex, 1);
+            terminals.unshift(kdeTerminal);
+          }
+        } else if (desktopEnv.includes("xfce")) {
+          const xfceIndex = terminals.findIndex(
+            (t) => t.cmd === "xfce4-terminal",
+          );
+          if (xfceIndex > 0) {
+            const [xfceTerminal] = terminals.splice(xfceIndex, 1);
+            terminals.unshift(xfceTerminal);
+          }
+        }
+
+        for (const term of terminals) {
+          try {
+            if (await commandExists(term.cmd)) {
+              console.log(`Intentando abrir terminal con: ${term.cmd}`);
+              const process = spawn(term.cmd, term.args, {
+                detached: true,
+                stdio: "ignore",
+              });
+              process.unref();
+              console.log(`Terminal abierta exitosamente con: ${term.cmd}`);
+              return true;
+            }
+          } catch (err) {
+            console.log(`No se pudo abrir con ${term.cmd}:`, err);
+          }
+        }
+
+        // Si llegamos aquí, ningún terminal funcionó
+        console.error(
+          "No se pudo encontrar un terminal disponible en tu sistema",
+        );
+        return false;
+      }
+    }
+  } catch (error) {
+    console.error("Error al intentar abrir la terminal:", error);
+    return false;
   }
 });
