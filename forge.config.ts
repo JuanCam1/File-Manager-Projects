@@ -18,15 +18,11 @@ const config: ForgeConfig = {
     new MakerSquirrel({}), 
     new MakerZIP({}, ['darwin']), 
     new MakerRpm({}), 
-    new MakerDeb({}),
-    {
-      name: '@electron-forge/maker-deb',
-        config: {
-          options: {
-            icon: './images/logo.png'
-          }
+    new MakerDeb({
+      options: {
+        icon: './images/logo.png'
       }
-    }
+    }),
   ],
   plugins: [
     new VitePlugin({
