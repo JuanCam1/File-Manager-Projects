@@ -8,13 +8,13 @@ interface ProjectListProps {
 }
 const ProjectTable: FC<ProjectListProps> = ({ projects }) => {
   return (
-    <div className="flex justify-center mt-4 overflow-hidden">
-      <Table className="w-[80%]">
+    <div className="flex justify-center mt-4 overflow-hidden px-4">
+      <Table className="w-full lg:w-[80%]">
         <Table.THeader className="w-full">
           <Table.ThCell className="lg:w-[20%]">Nombre</Table.ThCell>
           <Table.ThCell className="lg:w-[10%]">Tipo</Table.ThCell>
           <Table.ThCell className="lg:w-[50%]">Ruta</Table.ThCell>
-          <Table.ThCell className="lg:w-[10%]">Opción</Table.ThCell>
+          <Table.ThCell className="lg:w-[10%]">Abrir</Table.ThCell>
         </Table.THeader>
         <Table.TBody>
           {projects.map((project) => (

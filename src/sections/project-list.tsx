@@ -7,6 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProjectTable from "./project-table";
 import ProjectCard from "./project-card";
 import SkeletonList from "@/components/skeleton-list";
+import { Eraser } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ProjectListProps {
   loading: boolean;
@@ -40,16 +42,25 @@ const ProjectList: React.FC<ProjectListProps> = ({ loading }) => {
     return <SkeletonList />;
   }
 
+  const onClearSearch = () => {
+    setSearchTerm("");
+    setDebouncedSearchTerm("");
+  };
+
   return (
     <div className="flex flex-col">
       <div className="flex justify-evenly items-center gap-4 my-4">
-        <Input
-          placeholder="Bucar proyecto..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="dark:bg-zinc-950 w-64 dark:text-white"
-        />
-
+        <div className="flex items-center gap-2">
+          <Input
+            placeholder="Bucar proyecto..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="dark:bg-zinc-950 w-64 dark:text-white"
+          />
+          <Button onClick={onClearSearch}>
+            <Eraser color="white" />
+          </Button>
+        </div>
         <Tabs
           value={viewMode}
           onValueChange={setViewMode}

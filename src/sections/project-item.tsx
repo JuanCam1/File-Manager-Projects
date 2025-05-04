@@ -55,7 +55,7 @@ const ProjectItem: FC<ProjectItemProps> = ({ project }) => {
         </Button>
         <Button
           variant="outline"
-          className="text-white "
+          className="text-white dark:bg-zinc-950"
           size="sm"
           onClick={() => handleOpenTerminal(project.path)}
         >

@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SquareTerminal } from "lucide-react";
 
 import type { Project } from "@/models/project-model";
 import { getDeviceType } from "@/utils/getDeviceType";
@@ -16,25 +17,36 @@ const ProjectItemTable: FC<Props> = ({ project }) => {
   const handleOpenWithVSCode = useProjectStore(
     (state) => state.handleOpenWithVSCode,
   );
+  const handleOpenTerminal = useProjectStore(
+    (state) => state.handleOpenTerminal,
+  );
   const type = getDeviceType(project.name);
   const Icon = getIcon(type);
   const title = getTitle(type);
   return (
     <Table.TRow key={project.name}>
       <Table.TdCell className="text-left">{project.name}</Table.TdCell>
-      <Table.TdCell>
+      <Table.TdCell className="flex justify-center">
         <Badge
           variant="outline"
-          className="flex justify-center items-center gap-1 px-1 py-2"
+          className="flex justify-center items-center gap-1 px-1 py-2 w-[60%]"
         >
           <Icon className="w-4 h-4" />
           <span>{title}</span>
         </Badge>
       </Table.TdCell>
-      <Table.TdCell className="pl-2 text-left">{project.path}</Table.TdCell>
-      <Table.TdCell>
+      <Table.TdCell className=" pl-2 text-left">{project.path}</Table.TdCell>
+      <Table.TdCell className="flex items-center justify-center gap-2">
         <Button size="sm" onClick={() => handleOpenWithVSCode(project.path)}>
           vsc
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="dark:bg-zinc-950"
+          onClick={() => handleOpenTerminal(project.path)}
+        >
+          <SquareTerminal />
         </Button>
       </Table.TdCell>
     </Table.TRow>
