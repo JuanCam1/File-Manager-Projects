@@ -1,7 +1,7 @@
 {
-  "name": "manager-app",
+  "name": "CodeLaunch ",
   "version": "1.0.0",
-  "description": "Application Manager Projects",
+  "description": "Aplicación ligera para gestionar y lanzar proyectos directamente en Visual Studio Code o desde la terminal.",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
