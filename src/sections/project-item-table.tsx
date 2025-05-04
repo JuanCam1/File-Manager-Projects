@@ -31,7 +31,7 @@ const ProjectItemTable: FC<Props> = ({ project, onOpenEdit }) => {
       <Table.TdCell className="flex justify-center">
         <Badge
           variant="outline"
-          className="flex justify-center items-center gap-1 px-1 py-2 w-[60%]"
+          className="flex justify-center items-center gap-1 px-1 py-2 lg:w-[60%]"
         >
           <Icon className="w-4 h-4" />
           <span>{title}</span>
@@ -40,6 +40,7 @@ const ProjectItemTable: FC<Props> = ({ project, onOpenEdit }) => {
       <Table.TdCell className=" pl-2 text-left">{project.path}</Table.TdCell>
       <Table.TdCell className="flex items-center justify-center gap-2">
         <Button
+          variant="outline"
           className="dark:bg-zinc-950"
           size="sm"
           onClick={() => handleOpenWithVSCode(project.path)}
@@ -57,7 +58,8 @@ const ProjectItemTable: FC<Props> = ({ project, onOpenEdit }) => {
       </Table.TdCell>
       <Table.TdCell>
         <Button
-          className="text-white dark:bg-zinc-950"
+          variant="outline"
+          className="dark:text-white dark:bg-zinc-950"
           size="sm"
           onClick={() => onOpenEdit(project)}
         >

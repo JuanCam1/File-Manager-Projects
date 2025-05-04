@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className="py-2 text-base">
-        <p className="text-white">
+        <p className="dark:text-white text-zinc-700">
           Ruta seleccionada:
           <span className="ml-2 px-2 font-medium text-muted-foreground">
             {currentPath ? currentPath : "Ninguna"}

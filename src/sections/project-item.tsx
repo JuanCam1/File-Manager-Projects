@@ -60,7 +60,7 @@ const ProjectItem: FC<ProjectItemProps> = ({ project, onOpenEdit }) => {
           </Button>
           <Button
             variant="outline"
-            className="text-white dark:bg-zinc-950"
+            className="dark:text-white dark:bg-zinc-950"
             size="sm"
             onClick={() => handleOpenTerminal(project.path)}
           >
@@ -69,7 +69,7 @@ const ProjectItem: FC<ProjectItemProps> = ({ project, onOpenEdit }) => {
         </div>
         <Button
           variant="outline"
-          className="text-white dark:bg-zinc-950"
+          className="dark:text-white dark:bg-zinc-950"
           size="sm"
           onClick={() => onOpenEdit(project)}
         >
