@@ -64,7 +64,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ loading }) => {
             placeholder="Bucar proyecto..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="dark:bg-zinc-950 w-64 dark:text-white"
+            className="dark:bg-zinc-950 w-80 dark:text-white"
           />
           <Button onClick={onClearSearch}>
             <Eraser color="white" />

@@ -36,15 +36,24 @@ export const createProjectSlice: StateCreator<
   setProjects: (projects: Project[]) => set({ projects }),
   setLoading: (loading: boolean) => set({ loading }),
   setRefreshing: (refreshing: boolean) => set({ refreshing }),
+
   initPlatformPath: async () => {
     try {
+      const valueLocalStorage = localStorage.getItem("platformPath");
+
+      if (valueLocalStorage) {
+        set({ currentPath: valueLocalStorage });
+        return;
+      }
+
       const platformPath = await window.api.platform();
-      console.log(platformPath);
+      localStorage.setItem("platformPath", platformPath);
       set({ currentPath: platformPath });
     } catch (error) {
       console.error("Error al obtener la plataforma:", error);
     }
   },
+
   loadProjects: async () => {
     const { currentPath } = get();
 
@@ -72,8 +81,10 @@ export const createProjectSlice: StateCreator<
   handleSelectDirectory: async () => {
     try {
       const selectedPath = await window.api.selectDirectory();
+
       if (selectedPath) {
         set({ currentPath: selectedPath });
+        localStorage.setItem("platformPath", selectedPath);
         await get().loadProjects();
       }
     } catch (error) {

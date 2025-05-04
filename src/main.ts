@@ -30,8 +30,8 @@ const createWindow = () => {
 
     mainWindow.maximize();
 
-    const menu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(menu);
+    // const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(null);
 
     mainWindow.webContents.setWindowOpenHandler((details) => {
       shell.openExternal(details.url);
