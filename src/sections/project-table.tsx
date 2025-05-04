@@ -9,7 +9,7 @@ interface ProjectListProps {
 const ProjectTable: FC<ProjectListProps> = ({ projects }) => {
   return (
     <div className="flex justify-center mt-4 overflow-hidden px-4">
-      <Table className="w-full lg:w-[80%]">
+      <Table className="w-full lg:w-[90%]">
         <Table.THeader className="w-full">
           <Table.ThCell className="lg:w-[20%]">Nombre</Table.ThCell>
           <Table.ThCell className="lg:w-[10%]">Tipo</Table.ThCell>
