@@ -1,5 +1,5 @@
 {
-  "name": "CodeLaunch ",
+  "name": "CodeLaunch",
   "version": "1.0.0",
   "description": "Gestionar y lanzar proyectos directamente en Visual Studio Code o desde la terminal.",
   "main": ".vite/build/main.js",
@@ -46,12 +46,7 @@
     "typescript": "^5.5.2",
     "vite": "^5.4.14"
   },
-  "keywords": [
-    "Manager",
-    "Electron",
-    "React",
-    "Vite"
-  ],
+  "keywords": ["Manager", "Electron", "React", "Vite"],
   "author": {
     "name": "Juan Camilo Rojas Diaz",
     "email": "jcdiaz1998@outlook.es"

@@ -22,7 +22,7 @@ declare module "@tanstack/react-router" {
 export default function Main() {
   return (
     <>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
       <Toaster duration={2000} richColors />
     </>
   );

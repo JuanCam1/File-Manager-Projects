@@ -15,39 +15,43 @@ if (started) {
 let mainWindow: BrowserWindow;
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({
-    icon: "../images/logo.png",
-    title: "CodeLaunch",
-    minHeight: 600,
-    minWidth: 500,
-    frame: true,
-    show: true,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
-  });
+  try {
+    mainWindow = new BrowserWindow({
+      icon: path.join(__dirname, "../images/logo.png"),
+      title: "CodeLaunch",
+      minHeight: 600,
+      minWidth: 500,
+      frame: true,
+      show: true,
+      webPreferences: {
+        preload: path.join(__dirname, "preload.js"),
+      },
+    });
 
-  mainWindow.maximize();
+    mainWindow.maximize();
 
-  // const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(null);
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
 
-  // mainWindow.webContents.setWindowOpenHandler((details) => {
-  //   shell.openExternal(details.url);
-  //   return { action: "deny" };
-  // });
+    mainWindow.webContents.setWindowOpenHandler((details) => {
+      shell.openExternal(details.url);
+      return { action: "deny" };
+    });
 
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
-  } else {
-    mainWindow.loadFile(
-      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
-    );
+    if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+      mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+    } else {
+      mainWindow.loadFile(
+        path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
+      );
+    }
+
+    // mainWindow.webContents.openDevTools({
+    //   mode: "detach",
+    // });
+  } catch (error) {
+    fs.writeFileSync("/tmp/electron-app-error.log", String(error));
   }
-
-  // mainWindow.webContents.openDevTools({
-  //   mode: "detach",
-  // });
 };
 
 app.on("ready", createWindow);
