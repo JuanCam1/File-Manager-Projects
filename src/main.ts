@@ -17,7 +17,7 @@ let mainWindow: BrowserWindow;
 const createWindow = () => {
   mainWindow = new BrowserWindow({
     icon: "../images/logo.png",
-    title: "File Manager Projects",
+    title: "CodeLaunch",
     minHeight: 600,
     minWidth: 500,
     frame: true,
@@ -32,10 +32,10 @@ const createWindow = () => {
   // const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(null);
 
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url);
-    return { action: "deny" };
-  });
+  // mainWindow.webContents.setWindowOpenHandler((details) => {
+  //   shell.openExternal(details.url);
+  //   return { action: "deny" };
+  // });
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
@@ -241,7 +241,6 @@ ipcMain.handle("open-terminal", async (_: unknown, path: string) => {
           }
         }
 
-        // Si llegamos aquí, ningún terminal funcionó
         console.error(
           "No se pudo encontrar un terminal disponible en tu sistema",
         );
