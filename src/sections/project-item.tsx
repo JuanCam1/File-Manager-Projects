@@ -12,12 +12,15 @@ import { Button } from "@/components/ui/button";
 import { getDeviceType } from "@/utils/getDeviceType";
 import { getIcon, getTitle } from "@/utils/getType";
 import { useProjectStore } from "@/store";
+import { PencilLine, SquareTerminal } from "lucide-react";
+import VisualIcon from "@/assets/vsc-icon";
 
 interface ProjectItemProps {
   project: Project;
+  onOpenEdit: (project: Project) => void;
 }
 
-const ProjectItem: FC<ProjectItemProps> = ({ project }) => {
+const ProjectItem: FC<ProjectItemProps> = ({ project, onOpenEdit }) => {
   const handleOpenWithVSCode = useProjectStore(
     (state) => state.handleOpenWithVSCode,
   );
@@ -45,21 +48,32 @@ const ProjectItem: FC<ProjectItemProps> = ({ project }) => {
       <CardContent className="pb-2">
         <p className="text-muted-foreground text-sm truncate">{project.path}</p>
       </CardContent>
-      <CardFooter className="flex gap-3 pt-2">
-        <Button
-          className="text-white"
-          size="sm"
-          onClick={() => handleOpenWithVSCode(project.path)}
-        >
-          vsc
-        </Button>
+      <CardFooter className="flex justify-between pt-2">
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            className="dark:bg-zinc-950"
+            size="sm"
+            onClick={() => handleOpenWithVSCode(project.path)}
+          >
+            <VisualIcon />
+          </Button>
+          <Button
+            variant="outline"
+            className="text-white dark:bg-zinc-950"
+            size="sm"
+            onClick={() => handleOpenTerminal(project.path)}
+          >
+            <SquareTerminal className="w-4 h-4" />
+          </Button>
+        </div>
         <Button
           variant="outline"
           className="text-white dark:bg-zinc-950"
           size="sm"
-          onClick={() => handleOpenTerminal(project.path)}
+          onClick={() => onOpenEdit(project)}
         >
-          Terminal
+          <PencilLine className="w-4 h-4" />
         </Button>
       </CardFooter>
     </Card>

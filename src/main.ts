@@ -151,51 +151,6 @@ ipcMain.handle("platform", async () => {
   }
 });
 
-// ipcMain.handle("open-terminal", async (_: unknown, path: string) => {
-//   let command = null;
-//   try {
-//     switch (platform) {
-//       case "win32": {
-//         command = `start cmd.exe /K "cd /d ${path}"`;
-//         break;
-//       }
-//       case "darwin": {
-//         command = `open -a Terminal ${path}`;
-//         break;
-//       }
-//       case "linux": {
-//         const desktopEnv = process.env.XDG_CURRENT_DESKTOP?.toLowerCase() || "";
-
-//         if (desktopEnv.includes("gnome")) {
-//           command = `gnome-terminal --working-directory="${path}"`;
-//         } else if (desktopEnv.includes("kde")) {
-//           command = `konsole --workdir "${path}"`;
-//         } else if (desktopEnv.includes("xfce")) {
-//           command = `xfce4-terminal --working-directory="${path}"`;
-//         } else {
-//           command = `x-terminal-emulator -e "cd ${path} && bash"`;
-//         }
-//         break;
-//       }
-//     }
-
-//     if (!command) {
-//       return false;
-//     }
-
-//     exec(command, (error) => {
-//       if (error) {
-//         console.error(`Error al abrir terminal: ${error}`);
-//         return false;
-//       }
-//     });
-//     return true;
-//   } catch (error) {
-//     console.error("Error al intentar abrir la terminal:", error);
-//     return false;
-//   }
-// });
-
 const execAsync = promisify(exec);
 async function commandExists(command: string): Promise<boolean> {
   try {
@@ -298,3 +253,34 @@ ipcMain.handle("open-terminal", async (_: unknown, path: string) => {
     return false;
   }
 });
+
+ipcMain.handle(
+  "rename-project-folder",
+  async (_event, oldPath: string, newName: string) => {
+    try {
+      if (!fs.existsSync(oldPath)) {
+        return false;
+      }
+
+      const stats = fs.statSync(oldPath);
+
+      if (!stats.isDirectory()) {
+        return false;
+      }
+
+      const parentDir = path.dirname(oldPath);
+      const newPath = path.join(parentDir, newName);
+
+      if (fs.existsSync(newPath)) {
+        throw new Error(`Ya existe una carpeta con el nombre ${newName}`);
+      }
+
+      fs.renameSync(oldPath, newPath);
+
+      return true;
+    } catch (error) {
+      console.error("Error al renombrar la carpeta:", error);
+      return false;
+    }
+  },
+);

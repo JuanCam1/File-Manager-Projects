@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-router";
 
 import { routeTree } from "../routeTree.gen";
+import { Toaster } from "sonner";
 
 const memoryHistory = createMemoryHistory({
   initialEntries: ["/"],
@@ -19,5 +20,10 @@ declare module "@tanstack/react-router" {
 }
 
 export default function Main() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />;
+      <Toaster duration={2000} richColors />
+    </>
+  );
 }

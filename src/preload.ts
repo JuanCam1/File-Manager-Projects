@@ -10,4 +10,6 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.invoke("open-with-vscode", path),
   openTerminal: (path: string) => ipcRenderer.invoke("open-terminal", path),
   platform: () => ipcRenderer.invoke("platform"),
+  renameProjectFolder: (oldPath: string, newName: string) =>
+    ipcRenderer.invoke("rename-project-folder", oldPath, newName),
 });

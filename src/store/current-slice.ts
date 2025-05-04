@@ -17,6 +17,10 @@ export interface ProjectSlice {
   handleRefresh: () => Promise<void>;
   handleOpenWithVSCode: (projectPath: string) => Promise<boolean>;
   handleOpenTerminal: (projectPath: string) => Promise<boolean>;
+  handleRenameProjectFolder: (
+    oldPath: string,
+    newName: string,
+  ) => Promise<boolean>;
 }
 
 export const createProjectSlice: StateCreator<
@@ -97,9 +101,6 @@ export const createProjectSlice: StateCreator<
     try {
       const success = await window.api.openWithVSCode(projectPath);
       if (!success) {
-        alert(
-          "Error al abrir VSCode. Asegúrate de que está instalado y accesible desde la terminal.",
-        );
         return false;
       }
       return true;
@@ -113,12 +114,24 @@ export const createProjectSlice: StateCreator<
     try {
       const success = await window.api.openTerminal(projectPath);
       if (!success) {
-        alert("Error al abrir la terminal.");
         return false;
       }
       return true;
     } catch (error) {
       console.error("Error al abrir la terminal:", error);
+      return false;
+    }
+  },
+
+  handleRenameProjectFolder: async (oldPath: string, newName: string) => {
+    try {
+      const success = await window.api.renameProjectFolder(oldPath, newName);
+      if (!success) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error("Error al renombrar la carpeta:", error);
       return false;
     }
   },

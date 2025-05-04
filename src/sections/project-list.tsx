@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useProjectStore } from "@/store";
 import { Input } from "@/components/ui/input";
@@ -9,11 +9,15 @@ import ProjectCard from "./project-card";
 import SkeletonList from "@/components/skeleton-list";
 import { Eraser } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import type { Project } from "@/models/project-model";
+import Modal from "@/components/modal";
 
 interface ProjectListProps {
   loading: boolean;
 }
 const ProjectList: React.FC<ProjectListProps> = ({ loading }) => {
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
+  const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const projects = useProjectStore((state) => state.projects);
   const viewMode = useProjectStore((state) => state.viewMode);
   const setViewMode = useProjectStore((state) => state.setViewMode);
@@ -47,6 +51,11 @@ const ProjectList: React.FC<ProjectListProps> = ({ loading }) => {
     setDebouncedSearchTerm("");
   };
 
+  const onOpenEdit = (project: Project) => {
+    setProjectToEdit(project);
+    setIsOpenEdit(true);
+  };
+
   return (
     <div className="flex flex-col">
       <div className="flex justify-evenly items-center gap-4 my-4">
@@ -78,16 +87,24 @@ const ProjectList: React.FC<ProjectListProps> = ({ loading }) => {
           value="grid"
           className="mt-0 pt-2 border dark:border-zinc-600 rounded-md h-[500px] overflow-y-scroll scrollbar scrollbar-thumb-zinc-400 scrollbar-track-zinc-300 dark:scrollbar-thumb-zinc-950 dark:scrollbar-track-zinc-800"
         >
-          <ProjectCard projects={filteredProjects} />
+          <ProjectCard projects={filteredProjects} onOpenEdit={onOpenEdit} />
         </TabsContent>
 
         <TabsContent
           value="list"
           className="mt-0 pt-2 border dark:border-zinc-600 rounded-md h-[500px] overflow-y-scroll scrollbar scrollbar-thumb-zinc-400 scrollbar-track-zinc-300 dark:scrollbar-thumb-zinc-950 dark:scrollbar-track-zinc-800"
         >
-          <ProjectTable projects={filteredProjects} />
+          <ProjectTable projects={filteredProjects} onOpenEdit={onOpenEdit} />
         </TabsContent>
       </Tabs>
+
+      {isOpenEdit && projectToEdit && (
+        <Modal
+          open={isOpenEdit}
+          setOpen={setIsOpenEdit}
+          project={projectToEdit}
+        />
+      )}
     </div>
   );
 };

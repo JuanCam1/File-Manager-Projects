@@ -9,6 +9,7 @@ declare global {
       openWithVSCode: (projectPath: string) => Promise<boolean>;
       openTerminal: (path: string) => Promise<string>;
       platform:() => Promise<string>;
+      renameProjectFolder: (oldPath: string, newName: string) => Promise<boolean>;
     };
   }
 }
